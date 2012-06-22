@@ -14,6 +14,9 @@ fi
 while [ ! -f $ACCESS_TOKEN_FILE ]
 do
 	./require_access_token.sh
+	if [ $? -ne 0 ];then
+		exit 1
+	fi
 done
 
 source $ACCESS_TOKEN_FILE

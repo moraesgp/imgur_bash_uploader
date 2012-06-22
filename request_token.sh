@@ -58,6 +58,14 @@ if [ $? -ne 0 ];then
 	exit 1
 fi
 
+grep -i 'OAuth Verification Failed' $REQUEST_TOKEN_RESPONSE_BODY > /dev/null
+
+if [ $? -eq 0 ];then
+	cat $REQUEST_TOKEN_RESPONSE_BODY
+	echo
+	exit 1
+fi
+
 OAUTH_CALLBACK_ACCEPTED=`cat $REQUEST_TOKEN_RESPONSE_BODY | perl -npe 's/^.*auth_callback_accepted=(.*?)\&.*/$1/'`
 OAUTH_TOKEN=`cat $REQUEST_TOKEN_RESPONSE_BODY | perl -npe 's/^.*oauth_token=(.*?)\&.*/$1/'`
 OAUTH_TOKEN_SECRET=`cat $REQUEST_TOKEN_RESPONSE_BODY | perl -npe 's/^.*oauth_token_secret=(.*?)\&.*/$1/'`
