@@ -17,5 +17,8 @@ export OAUTH_VERSION="1.0"
 export REQUEST_TOKEN_URL="https://api.imgur.com/oauth/request_token"
 export AUTHORIZE_URL="https://api.imgur.com/oauth/authorize"
 export ACCESS_TOKEN_URL="https://api.imgur.com/oauth/access_token"
+export IMAGES_API_URL="http://api.imgur.com/2/account/images"
 
 export ACCESS_TOKEN_FILE="valid_access_token.sh"
+
+export ALBUM_FILE_SUFFIX="_photo_to_album"
