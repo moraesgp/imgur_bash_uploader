@@ -53,6 +53,10 @@ curl --dump-header $HEADERS_N_COOKIES_FILE \
 --form image=@${FILE_PATH} \
 $IMAGES_API_URL > $ACCESS_RESOURCES_RESPONSE_BODY
 
+CURL_RETURN_VALUE=$?
+
+echo "$0: CURL_RETURN_VALUE: $CURL_RETURN_VALUE"
+
 grep -i 'HTTP/1.1 200 OK' $HEADERS_N_COOKIES_FILE > /dev/null
 
 if [ $? -ne 0 ];then
