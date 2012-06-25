@@ -24,15 +24,14 @@ QUERY_ALBUM_RETURN_VALUE=$?
 ALBUM_HASH=
 
 if [ $QUERY_ALBUM_RETURN_VALUE -eq 99 ];then
-	echo "$0: Album $ALBUM_NAME does not exist. Needs to be created"
-	# add logic to create album
-	exit 1
+	echo "$0: Album $ALBUM_NAME does not exist. It will be created now"
+	./create_album.sh $ALBUM_NAME
 elif [ $QUERY_ALBUM_RETURN_VALUE -ne 0 ];then
 	echo "$0: There was a problem. Exiting"
 	exit 1
-else
-	ALBUM_HASH=$(cat ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_PREFIX})
 fi
+
+ALBUM_HASH=$(cat ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_PREFIX})
 
 PHOTO_HASH_LIST=
 

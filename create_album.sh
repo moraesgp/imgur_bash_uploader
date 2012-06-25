@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# This script query imgur for an album called $ALBUM_NAME
-# if it finds, it returns within a file
-# if it doens't find, than it return error code 99
+# This script a new album called $ALBUM_NAME
+# than it returns its hash within a file
 
 if [ $# -lt 1 ];then
 	echo "usage: $0 ALBUM_NAME"
@@ -11,16 +10,16 @@ fi
 
 ALBUM_NAME=$1
 
-METHOD=GET
+METHOD=POST
 
 source common_functions.sh
 
 OAUTH_TIMESTAMP=`date  +'%s'`
 OAUTH_NONCE=`head -c 300 /dev/urandom | tr -dc A-Za-z0-9 | head -c 30`
 DEBUG_FILE=`mktemp --tmpdir=$LOGTEMPDIR ascii_debug_${OAUTH_TIMESTAMP}_XXXXXXX`
-HEADERS_N_COOKIES_FILE=`mktemp --tmpdir=$LOGTEMPDIR query_album_header_${OAUTH_TIMESTAMP}_XXXXXXX`
-ACCESS_RESOURCES_RESPONSE_BODY=`mktemp --tmpdir=$LOGTEMPDIR query_album_body_${OAUTH_TIMESTAMP}_XXXXXXX`
-BASE_STRING_TEMP_FILE=`mktemp --tmpdir=$LOGTEMPDIR base_string_query_album_${OAUTH_TIMESTAMP}_XXXXXXX`
+HEADERS_N_COOKIES_FILE=`mktemp --tmpdir=$LOGTEMPDIR create_album_header_${OAUTH_TIMESTAMP}_XXXXXXX`
+ACCESS_RESOURCES_RESPONSE_BODY=`mktemp --tmpdir=$LOGTEMPDIR create_album_body_${OAUTH_TIMESTAMP}_XXXXXXX`
+BASE_STRING_TEMP_FILE=`mktemp --tmpdir=$LOGTEMPDIR base_string_create_album_${OAUTH_TIMESTAMP}_XXXXXXX`
 
 write_parameter oauth_consumer_key ${OAUTH_CONSUMER_KEY}
 write_parameter oauth_signature_method ${OAUTH_SIGN_METHOD}
@@ -28,6 +27,9 @@ write_parameter oauth_timestamp ${OAUTH_TIMESTAMP}
 write_parameter oauth_nonce ${OAUTH_NONCE}
 write_parameter oauth_version ${OAUTH_VERSION}
 write_parameter oauth_token ${OAUTH_TOKEN}
+write_parameter title ${ALBUM_NAME}
+write_parameter privacy public
+write_parameter layout grid
 
 PARAMETER_STRING=$(create_parameter_string)
 
@@ -44,7 +46,6 @@ echo oauth_signature
 echo $OAUTH_SIGNATURE
 echo
 # --header "Content-Type: application/x-www-form-urlencoded" \
-# --data "add_images=$IMAGE_HASH" \
 
 curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
 --header "Authorization: OAuth "\
@@ -55,6 +56,9 @@ curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
 "oauth_timestamp=\"$OAUTH_TIMESTAMP\","\
 "oauth_nonce=\"$OAUTH_NONCE\","\
 "oauth_version=\"$OAUTH_VERSION\"" \
+--data "title=${ALBUM_NAME}" \
+--data "privacy=public" \
+--data "layout=grid" \
 $ALBUMS_API_URL > $ACCESS_RESOURCES_RESPONSE_BODY
 
 RESPONSE_STATUS_LINE=`grep '^HTTP' $HEADERS_N_COOKIES_FILE`
@@ -67,13 +71,7 @@ if [ $? -ne 0 ];then
 	exit 1
 fi
 
-ALBUM_HASH_TEMP=`xpath -e "/albums/item[title[.=\"$ALBUM_NAME\"]]/id" -q $ACCESS_RESOURCES_RESPONSE_BODY`
-
-if [ -z "$ALBUM_HASH_TEMP" ];then
-	echo "$0: album $ALBUM_NAME not found"
-	touch ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_PREFIX}
-	exit 99
-fi
+ALBUM_HASH_TEMP=`xpath -e "/albums/id" -q $ACCESS_RESOURCES_RESPONSE_BODY`
 
 ALBUM_HASH=`echo $ALBUM_HASH_TEMP | perl -npe 's/^<id>(.*)<\/id>.*/$1/'`
 
