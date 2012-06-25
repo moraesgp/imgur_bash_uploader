@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 1 ];then
-	echo "usage: $0 /path/to/picture.jpg [ALBUM NAME]"
+	echo "usage: $0 /path/to/picture.jpg [ALBUM_NAME]"
 	exit 1
 fi
 
@@ -40,7 +40,7 @@ echo $OAUTH_SIGNATURE
 echo
 # --header "Content-Type: application/x-www-form-urlencoded" \
 
-curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
+curl --dump-header $HEADERS_N_COOKIES_FILE \
 --header "Authorization: OAuth "\
 "oauth_consumer_key=\"$OAUTH_CONSUMER_KEY\","\
 "oauth_token=\"$OAUTH_TOKEN\","\
@@ -52,15 +52,24 @@ curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
 --form image=@${FILE_PATH} \
 $IMAGES_API_URL > $ACCESS_RESOURCES_RESPONSE_BODY
 
-RESPONSE_STATUS_LINE=`grep '^HTTP' $HEADERS_N_COOKIES_FILE`
-
-echo $RESPONSE_STATUS_LINE | grep 200
+grep -i 'HTTP/1.1 200 OK' $HEADERS_N_COOKIES_FILE > /dev/null
 
 if [ $? -ne 0 ];then
 	echo "response status not equal to 200"
+	grep -i 'Status' $HEADERS_N_COOKIES_FILE
+	xpath -e "/error/message" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<message>(.*)<\/message>.*/$1/'
 	echo "programm will exit"
 	exit 1
 fi
 
-exit 0
+ERROR_MESSAGE=`xpath -e "/error/message" -q $ACCESS_RESOURCES_RESPONSE_BODY`
+
+if [ -n "$ERROR_MESSAGE" ];then
+	echo $ERROR_MESSAGE
+	exit 1
+fi
+
+PHOTO_HASH=$(xpath -e "/images/image/hash" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<hash>(.*)<\/hash>.*/$1/')
+
+echo PHOTO_HASH: $PHOTO_HASH
 
