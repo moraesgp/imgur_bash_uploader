@@ -1,9 +1,10 @@
 #!/bin/bash
 
-if [ $# -ne 1 ];then
+if [ $# -lt 1 ];then
 	echo "usage: $0 /path/to/picture.jpg [ALBUM_NAME]"
 	exit 1
 fi
+
 
 METHOD=POST
 FILE_PATH=$1
@@ -71,5 +72,5 @@ fi
 
 PHOTO_HASH=$(xpath -e "/images/image/hash" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<hash>(.*)<\/hash>.*/$1/')
 
-echo PHOTO_HASH: $PHOTO_HASH
+echo $PHOTO_HASH >> ${LOGTEMPDIR}/${ALBUM}${ALBUM_FILE_SUFFIX}
 
