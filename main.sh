@@ -39,7 +39,7 @@ source $ACCESS_TOKEN_FILE
 # 4) mark file as COMPLETED so it doesn't get run again
 # 5) pickup the next album file and continue 
 
-ALBUM_FILE_IMGs_HASH=$(find $LOGTEMPDIR -name "*${ALBUM_FILE_SUFFIX}*" -not -name "*COMPLETED" -print | head -1)
+ALBUM_FILE_IMGs_HASH=$(ls -1tr logtmp/*${ALBUM_FILE_SUFFIX}* 2> /dev/null | grep -v COMPLETED | head -1)
                 
 while [ -n "$ALBUM_FILE_IMGs_HASH" ]
 do      
