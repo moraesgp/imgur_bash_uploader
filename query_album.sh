@@ -71,12 +71,12 @@ ALBUM_HASH_TEMP=`xpath -e "/albums/item[title[.=\"$ALBUM_NAME\"]]/id" -q $ACCESS
 
 if [ -z "$ALBUM_HASH_TEMP" ];then
 	echo "$0: album $ALBUM_NAME not found"
-	touch ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_PREFIX}
+	touch ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX}
 	exit 99
 fi
 
 ALBUM_HASH=`echo $ALBUM_HASH_TEMP | perl -npe 's/^<id>(.*)<\/id>.*/$1/'`
 
-echo $ALBUM_HASH > ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_PREFIX}
+echo $ALBUM_HASH > ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX}
 
 
