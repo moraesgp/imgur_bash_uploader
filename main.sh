@@ -13,6 +13,7 @@ fi
 
 while [ ! -f $ACCESS_TOKEN_FILE ]
 do
+	echo "$ACCESS_TOKEN_FILE not found. Requesting Access Token now."
 	./require_access_token.sh
 	if [ $? -ne 0 ];then
 		exit 1
@@ -21,8 +22,5 @@ done
 
 source $ACCESS_TOKEN_FILE
 
-echo using
-echo "OAUTH_TOKEN: $OAUTH_TOKEN"
-echo "OAUTH_TOKEN_SECRET: $OAUTH_TOKEN_SECRET"
-echo FINISHED
+./search_pictures.sh
 

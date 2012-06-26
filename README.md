@@ -11,14 +11,17 @@ INSTALL
 
 Since it's a shell script there is no need to install the application. But it does have some dependencies that should be installed:
 
-1) cURL
+1) cURL: C URL command line tool
+
 sudo apt-get install curl
 
-2) gridsite-clients (it's a package that contains the binary urlencode used on this app). More information here:
-http://packages.debian.org/sid/gridsite-clients
+2) urlencode: It's an application that transforms strings into 'percent encode' so they can be used on URLs. It is within the package gridsite-clients. More information here: http://packages.debian.org/sid/gridsite-clients
 
 sudo apt-get install gridsite-clients
 
+3) xpath is the Perl wrapper to parse XML tags.
+
+apt-get install libxml-xpath-perl
 
 RUNNING
 
