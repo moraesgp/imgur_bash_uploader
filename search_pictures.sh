@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -x
 
 if [ ! -d $PHOTO_ROOT_DIR ];then
 	echo "$0: Photo directory $PHOTO_ROOT_DIR could not be found"
@@ -18,16 +17,21 @@ if [ ! -d $MOVE_PHOTO_DIR ];then
 	fi
 fi
 
+source common_functions.sh
+
 CURRENT_DIR=$PHOTO_ROOT_DIR
 CURRENT_FILE=""
 ALBUM_PHOTO_HASHES=
+
+arr=("/dev/null")
 
 # Warning! All files and folders on PHOTO_ROOT_DIR will be moved to 
 # MOVE_PHOTO_DIR after they are uploaded into imgur
 
 while [ -n "$(ls -A $PHOTO_ROOT_DIR)" ]
 do
-	# read -p pause
+	read -p pause
+	echo ${arr[@]}
 	CURRENT_FILE=`ls -1Ad $CURRENT_DIR/* 2> /dev/null | head -1`
 	if [ -z "$CURRENT_FILE" ];then
 		# current directory is empty. Remove it and go to parent directory
@@ -35,6 +39,7 @@ do
 		echo "./process_name.sh `basename $CURRENT_DIR`"
 		rm -r $CURRENT_DIR
 		CURRENT_DIR=`dirname $CURRENT_DIR`
+		arr_pop
 		continue
 	fi
 	if [ -d $CURRENT_FILE ];then
@@ -42,11 +47,13 @@ do
 		CURRENT_DIR=$CURRENT_FILE
 		mkdir -p ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
 		export ALBUM_PHOTO_HASHES=$(mktemp --tmpdir=$LOGTEMPDIR `basename $CURRENT_DIR`${ALBUM_FILE_SUFFIX}_XXXXXX) 
+		arr_push $ALBUM_PHOTO_HASHES
 		continue
 	else
 		echo "$0: FOUND FILE $CURRENT_FILE"
 		# place photo upload command here
-		./upload_image.sh $CURRENT_FILE `basename $CURRENT_DIR`
+		LAST_INDEX=$(expr ${#arr[@]} - 1)
+		./upload_image.sh $CURRENT_FILE `basename $CURRENT_DIR` ${arr[$LAST_INDEX]}
 		if [ $? -eq 0 ];then
 			mv $CURRENT_FILE ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
 		else

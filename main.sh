@@ -44,12 +44,17 @@ ALBUM_FILE_IMGs_HASH=$(ls -1tr logtmp/*${ALBUM_FILE_SUFFIX}* 2> /dev/null | grep
 while [ -n "$ALBUM_FILE_IMGs_HASH" ]
 do      
         echo "$0: working album file  $ALBUM_FILE_IMGs_HASH"
-	./add_images_to_album.sh $ALBUM_FILE_IMGs_HASH
-	if [ $? -eq 0 ];then
-	        mv $ALBUM_FILE_IMGs_HASH ${ALBUM_FILE_IMGs_HASH}_COMPLETED
+	if [ -s "$ALBUM_FILE_IMGs_HASH" ];then
+		./add_images_to_album.sh $ALBUM_FILE_IMGs_HASH
+		if [ $? -eq 0 ];then
+		        mv $ALBUM_FILE_IMGs_HASH ${ALBUM_FILE_IMGs_HASH}_COMPLETED
+		else
+			echo "$0: Problem including images into album. Please check"
+			exit 1
+		fi
 	else
-		echo "$0: Problem including images into album. Please check"
-		exit 1
+		echo "$0: file $ALBUM_FILE_IMGs_HASH has zero byte. Skipping"
+		mv $ALBUM_FILE_IMGs_HASH ${ALBUM_FILE_IMGs_HASH}_COMPLETED
 	fi
         ALBUM_FILE_IMGs_HASH=$(find $LOGTEMPDIR -name "*${ALBUM_FILE_SUFFIX}*" -not -name "*COMPLETED" -print | head -1)
 done

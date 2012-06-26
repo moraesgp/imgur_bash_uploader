@@ -18,3 +18,14 @@ function create_parameter_string() {
 
 }
 
+arr_push() {
+	arr=("${arr[@]}" "$1")
+}
+
+arr_pop() {
+	i=$(expr ${#arr[@]} - 1)
+	placeholder=${arr[$i]}
+	unset arr[$i]
+	arr=("${arr[@]}")
+}
+

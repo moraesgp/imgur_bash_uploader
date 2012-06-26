@@ -1,19 +1,15 @@
 #!/bin/bash
 
-if [ $# -lt 1 ];then
-	echo "usage: $0 /path/to/picture.jpg [ALBUM_NAME]"
+if [ $# -lt 3 ];then
+	echo "usage: $0 /path/to/picture.jpg ALBUM_NAME ALBUM_PHOTOS_HASH_LIST"
 	exit 1
 fi
 
 
 METHOD=POST
 FILE_PATH=$1
-ALBUM=${2:-NOALBUM}
-
-if [ -z "$ALBUM_PHOTO_HASHES" ];then
-	echo "$0: Warning variable ALBUM_PHOTO_HASHES unset. Creating default value"
-	ALBUM_PHOTO_HASHES=$(mktemp --tmpdir=$LOGTEMPDIR ${ALBUM}${ALBUM_FILE_SUFFIX}_XXXXXX)
-fi
+ALBUM=$2
+ALBUM_PHOTO_HASHES=$3
 
 source common_functions.sh
 
