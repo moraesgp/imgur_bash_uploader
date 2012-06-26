@@ -75,6 +75,6 @@ ALBUM_HASH_TEMP=`xpath -e "/albums/id" -q $ACCESS_RESOURCES_RESPONSE_BODY`
 
 ALBUM_HASH=`echo $ALBUM_HASH_TEMP | perl -npe 's/^<id>(.*)<\/id>.*/$1/'`
 
-echo $ALBUM_HASH > ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_PREFIX}
+echo $ALBUM_HASH > ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX}
 
 
