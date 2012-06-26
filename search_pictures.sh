@@ -39,14 +39,14 @@ do
 	if [ -d $CURRENT_FILE ];then
 		# if current_file is a dir
 		CURRENT_DIR=$CURRENT_FILE
-		mkdir -p ${MOVE_PHOTO_DIR}${CURRENT_DIR}
+		mkdir -p ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
 		continue
 	else
 		echo "$0: FOUND FILE $CURRENT_FILE"
 		# place photo upload command here
 		./upload_image.sh $CURRENT_FILE `basename $CURRENT_DIR`
 		if [ $? -eq 0 ];then
-			mv $CURRENT_FILE ${MOVE_PHOTO_DIR}${CURRENT_DIR}
+			mv $CURRENT_FILE ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
 		else
 			echo "$0: There was a problem with upload_image.sh. Please check"
 			exit 1
