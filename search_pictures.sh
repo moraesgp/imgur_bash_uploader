@@ -20,6 +20,7 @@ fi
 
 CURRENT_DIR=$PHOTO_ROOT_DIR
 CURRENT_FILE=""
+ALBUM_PHOTO_HASHES=
 
 # Warning! All files and folders on PHOTO_ROOT_DIR will be moved to 
 # MOVE_PHOTO_DIR after they are uploaded into imgur
@@ -40,6 +41,7 @@ do
 		# if current_file is a dir
 		CURRENT_DIR=$CURRENT_FILE
 		mkdir -p ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
+		export ALBUM_PHOTO_HASHES=$(mktemp --tmpdir=$LOGTEMPDIR `basename $CURRENT_DIR`${ALBUM_FILE_SUFFIX}_XXXXXX) 
 		continue
 	else
 		echo "$0: FOUND FILE $CURRENT_FILE"

@@ -10,6 +10,11 @@ METHOD=POST
 FILE_PATH=$1
 ALBUM=${2:-NOALBUM}
 
+if [ -z "$ALBUM_PHOTO_HASHES" ];then
+	echo "$0: Warning variable ALBUM_PHOTO_HASHES unset. Creating default value"
+	ALBUM_PHOTO_HASHES=$(mktemp --tmpdir=$LOGTEMPDIR ${ALBUM}${ALBUM_FILE_SUFFIX}_XXXXXX)
+fi
+
 source common_functions.sh
 
 OAUTH_TIMESTAMP=`date  +'%s'`
@@ -76,5 +81,5 @@ fi
 
 PHOTO_HASH=$(xpath -e "/images/image/hash" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<hash>(.*)<\/hash>.*/$1/')
 
-echo $PHOTO_HASH >> ${LOGTEMPDIR}/${ALBUM}${ALBUM_FILE_SUFFIX}
+echo $PHOTO_HASH >> $ALBUM_PHOTO_HASHES
 

@@ -22,6 +22,6 @@ export ALBUMS_API_URL="http://api.imgur.com/2/account/albums"
 
 export ACCESS_TOKEN_FILE="valid_access_token.sh"
 
-export ALBUM_FILE_SUFFIX="_photo_to_album"
+export ALBUM_FILE_SUFFIX="_photos_hashes_list"
 export ALBUM_HASH_SUFFIX="_album_hash"
 

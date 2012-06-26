@@ -15,8 +15,9 @@ source imgur_config.sh
 source valid_access_token.sh
 
 BASE_ALBUM_FILE_NAME=`basename $ALBUM_FILE_NAME`
-ALBUM_NAME="${BASE_ALBUM_FILE_NAME%%${ALBUM_FILE_SUFFIX}}"
 
+ALBUM_NAME=${BASE_ALBUM_FILE_NAME%${ALBUM_FILE_SUFFIX}*}
+ALBUM_NAME=`basename $ALBUM_NAME`
 
 ./query_album.sh $ALBUM_NAME
 QUERY_ALBUM_RETURN_VALUE=$?
