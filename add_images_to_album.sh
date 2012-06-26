@@ -31,6 +31,11 @@ fi
 
 ALBUM_HASH=$(cat ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX})
 
+if [ -z "$ALBUM_HASH" ];then
+	echo "$0: Empty album hash. Something went wrong. Exiting"
+	exit 1
+fi
+
 PHOTO_HASH_LIST=
 
 while read photo_hash
