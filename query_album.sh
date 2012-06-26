@@ -59,12 +59,21 @@ $ALBUMS_API_URL > $ACCESS_RESOURCES_RESPONSE_BODY
 
 RESPONSE_STATUS_LINE=`grep '^HTTP' $HEADERS_N_COOKIES_FILE`
 
+echo $RESPONSE_STATUS_LINE | grep 404
+
+if [ $? -eq 0 ];then
+	echo "$0: Got response 404. It means it's the first album beeing created"
+	echo "$0: album $ALBUM_NAME not found"
+	touch ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX}
+	exit 99
+fi
+
 echo $RESPONSE_STATUS_LINE | grep 200
 
 if [ $? -ne 0 ];then
-	echo "response status not equal to 200"
-	echo "programm will exit"
-	exit 1
+        echo "response status not equal to 200"
+        echo "programm will exit"
+        exit 1
 fi
 
 ALBUM_HASH_TEMP=`xpath -e "/albums/item[title[.=\"$ALBUM_NAME\"]]/id" -q $ACCESS_RESOURCES_RESPONSE_BODY | head -1`
