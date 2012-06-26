@@ -27,7 +27,7 @@ ALBUM_PHOTO_HASHES=
 
 while [ -n "$(ls -A $PHOTO_ROOT_DIR)" ]
 do
-	read -p pause
+	# read -p pause
 	CURRENT_FILE=`ls -1Ad $CURRENT_DIR/* 2> /dev/null | head -1`
 	if [ -z "$CURRENT_FILE" ];then
 		# current directory is empty. Remove it and go to parent directory
