@@ -67,7 +67,7 @@ if [ $? -ne 0 ];then
 	exit 1
 fi
 
-ALBUM_HASH_TEMP=`xpath -e "/albums/item[title[.=\"$ALBUM_NAME\"]]/id" -q $ACCESS_RESOURCES_RESPONSE_BODY`
+ALBUM_HASH_TEMP=`xpath -e "/albums/item[title[.=\"$ALBUM_NAME\"]]/id" -q $ACCESS_RESOURCES_RESPONSE_BODY | head -1`
 
 if [ -z "$ALBUM_HASH_TEMP" ];then
 	echo "$0: album $ALBUM_NAME not found"
