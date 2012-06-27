@@ -5,7 +5,6 @@ if [ $# -lt 3 ];then
 	exit 1
 fi
 
-
 METHOD=POST
 FILE_PATH=$1
 ALBUM=$2
@@ -29,18 +28,9 @@ write_parameter oauth_token ${OAUTH_TOKEN}
 
 PARAMETER_STRING=$(create_parameter_string)
 
-echo "parameter string"
-echo $PARAMETER_STRING
-echo
-
 BASE_STRING="${METHOD}&`urlencode ${IMAGES_API_URL}`&"$PARAMETER_STRING
 
 OAUTH_SIGNATURE=`echo -n $BASE_STRING | openssl dgst -sha1 -binary -hmac "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}" | base64`
-
-echo oauth_signature
-echo $OAUTH_SIGNATURE
-echo
-# --header "Content-Type: application/x-www-form-urlencoded" \
 
 curl --dump-header $HEADERS_N_COOKIES_FILE \
 --header "Authorization: OAuth "\
@@ -61,10 +51,10 @@ echo "$0: CURL_RETURN_VALUE: $CURL_RETURN_VALUE"
 grep -i 'HTTP/1.1 200 OK' $HEADERS_N_COOKIES_FILE > /dev/null
 
 if [ $? -ne 0 ];then
-	echo "response status not equal to 200"
+	echo "$0: response status not equal to 200"
 	grep -i 'Status' $HEADERS_N_COOKIES_FILE
 	xpath -e "/error/message" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<message>(.*)<\/message>.*/$1/'
-	echo "programm will exit"
+	echo "$0: programm will exit"
 	exit 1
 fi
 

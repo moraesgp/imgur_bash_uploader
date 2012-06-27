@@ -3,10 +3,10 @@
 source imgur_config.sh
 
 if [ ! -d $LOGTEMPDIR ];then
-	echo $LOGTEMPDIR  does not exist. Will be created.
-	mkdir $LOGTEMPDIR
+	echo "$0: $LOGTEMPDIR  does not exist. Will be created."
+	mkdir -p $LOGTEMPDIR
 	if [ $? -ne 0 ];then
-		echo could not create $LOGTEMPDIR. Exiting.
+		echo "$0: could not create $LOGTEMPDIR. Exiting."
 		exit 1
 	fi
 fi
@@ -17,15 +17,15 @@ export REQUEST_TOKEN_DATA=`mktemp --tmpdir=$LOGTEMPDIR request_token_data_${TIME
 ./request_token.sh
 
 if [ $? -ne 0 ];then
-	echo "There was a problem acquiring request token. Exiting"
+	echo "$0: There was a problem acquiring request token. Exiting"
 	exit 1
 fi
 
 source $REQUEST_TOKEN_DATA
 
 if [ $OAUTH_CALLBACK_ACCEPTED -ne 1 ];then
-        echo Callback returned $OAUTH_CALLBACK_ACCEPTED. It should be 1
-        echo exiting
+        echo "$0: Callback returned $OAUTH_CALLBACK_ACCEPTED. It should be 1"
+        echo "$0: exiting"
         exit 1
 fi
 
@@ -55,7 +55,7 @@ done
 
 cp $ACCESS_TOKEN_DATA $ACCESS_TOKEN_FILE
 
-echo "file $ACCESS_TOKEN_FILE successfuly created and ready to use"
+echo "$0: file $ACCESS_TOKEN_FILE successfuly created and ready to use"
 
 exit 0
 
