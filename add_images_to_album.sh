@@ -74,19 +74,9 @@ write_parameter add_images ${PHOTO_HASH_LIST}
 
 PARAMETER_STRING=$(create_parameter_string)
 
-echo "parameter string"
-echo $PARAMETER_STRING
-echo
-
 BASE_STRING="${METHOD}&`urlencode ${ALBUMS_API_URL}/${ALBUM_HASH}`&"$PARAMETER_STRING
 
-echo "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}"
 OAUTH_SIGNATURE=`echo -n $BASE_STRING | openssl dgst -sha1 -binary -hmac "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}" | base64`
-
-echo oauth_signature
-echo $OAUTH_SIGNATURE
-echo
-# --header "Content-Type: application/x-www-form-urlencoded" \
 
 curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
 --header "Authorization: OAuth "\
