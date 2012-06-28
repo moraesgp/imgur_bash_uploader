@@ -15,9 +15,9 @@ source common_functions.sh
 OAUTH_TIMESTAMP=`date  +'%s'`
 OAUTH_NONCE=`head -c 300 /dev/urandom | tr -dc A-Za-z0-9 | head -c 30`
 DEBUG_FILE=`mktemp --tmpdir=$LOGTEMPDIR ascii_debug_${OAUTH_TIMESTAMP}_XXXXXXX`
-HEADERS_N_COOKIES_FILE=`mktemp --tmpdir=$LOGTEMPDIR access_resources_header_${OAUTH_TIMESTAMP}_XXXXXXX`
-ACCESS_RESOURCES_RESPONSE_BODY=`mktemp --tmpdir=$LOGTEMPDIR access_resources_body_${OAUTH_TIMESTAMP}_XXXXXXX`
-BASE_STRING_TEMP_FILE=`mktemp --tmpdir=$LOGTEMPDIR base_string_access_resources${OAUTH_TIMESTAMP}_XXXXXXX`
+HEADERS_N_COOKIES_FILE=`mktemp --tmpdir=$LOGTEMPDIR upload_image_header_${OAUTH_TIMESTAMP}_XXXXXXX`
+ACCESS_RESOURCES_RESPONSE_BODY=`mktemp --tmpdir=$LOGTEMPDIR upload_image_body_${OAUTH_TIMESTAMP}_XXXXXXX`
+BASE_STRING_TEMP_FILE=`mktemp --tmpdir=$LOGTEMPDIR base_string_upload_image${OAUTH_TIMESTAMP}_XXXXXXX`
 
 write_parameter oauth_consumer_key ${OAUTH_CONSUMER_KEY}
 write_parameter oauth_signature_method ${OAUTH_SIGN_METHOD}
