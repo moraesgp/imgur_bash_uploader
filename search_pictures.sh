@@ -36,8 +36,6 @@ do
 	CURRENT_FILE=`ls -1Ad $CURRENT_DIR/* 2> /dev/null | head -1`
 	if [ -z "$CURRENT_FILE" ];then
 		# current directory is empty. Remove it and go to parent directory
-		echo "$0: START IN BACKGROUND PROCESS THAT WILL ASSIGN PHOTOS TO ALBUMS"
-		echo "./process_name.sh `basename $CURRENT_DIR`"
 		rm -r $CURRENT_DIR
 		CURRENT_DIR=`dirname $CURRENT_DIR`
 		arr_pop
@@ -52,7 +50,6 @@ do
 		continue
 	else
 		echo "$0: FOUND FILE $CURRENT_FILE"
-		# place photo upload command here
 		LAST_INDEX=$(expr ${#arr[@]} - 1)
 		./upload_image.sh $CURRENT_FILE `basename $CURRENT_DIR` ${arr[$LAST_INDEX]}
 		if [ $? -eq 0 ];then

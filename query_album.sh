@@ -31,20 +31,9 @@ write_parameter oauth_token ${OAUTH_TOKEN}
 
 PARAMETER_STRING=$(create_parameter_string)
 
-echo "parameter string"
-echo $PARAMETER_STRING
-echo
-
 BASE_STRING="${METHOD}&`urlencode ${ALBUMS_API_URL}`&"$PARAMETER_STRING
 
-echo "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}"
 OAUTH_SIGNATURE=`echo -n $BASE_STRING | openssl dgst -sha1 -binary -hmac "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}" | base64`
-
-echo oauth_signature
-echo $OAUTH_SIGNATURE
-echo
-# --header "Content-Type: application/x-www-form-urlencoded" \
-# --data "add_images=$IMAGE_HASH" \
 
 curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
 --header "Authorization: OAuth "\
@@ -71,8 +60,8 @@ fi
 echo $RESPONSE_STATUS_LINE | grep 200
 
 if [ $? -ne 0 ];then
-        echo "response status not equal to 200"
-        echo "programm will exit"
+        echo "$0: response status not equal to 200"
+        echo "$0: programm will exit"
         exit 1
 fi
 
@@ -87,5 +76,4 @@ fi
 ALBUM_HASH=`echo $ALBUM_HASH_TEMP | perl -npe 's/^<id>(.*)<\/id>.*/$1/'`
 
 echo $ALBUM_HASH > ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX}
-
 

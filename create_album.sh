@@ -33,19 +33,9 @@ write_parameter layout grid
 
 PARAMETER_STRING=$(create_parameter_string)
 
-echo "parameter string"
-echo $PARAMETER_STRING
-echo
-
 BASE_STRING="${METHOD}&`urlencode ${ALBUMS_API_URL}`&"$PARAMETER_STRING
 
-echo "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}"
 OAUTH_SIGNATURE=`echo -n $BASE_STRING | openssl dgst -sha1 -binary -hmac "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}" | base64`
-
-echo oauth_signature
-echo $OAUTH_SIGNATURE
-echo
-# --header "Content-Type: application/x-www-form-urlencoded" \
 
 curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
 --header "Authorization: OAuth "\
@@ -66,8 +56,8 @@ RESPONSE_STATUS_LINE=`grep '^HTTP' $HEADERS_N_COOKIES_FILE`
 echo $RESPONSE_STATUS_LINE | grep 200
 
 if [ $? -ne 0 ];then
-	echo "response status not equal to 200"
-	echo "programm will exit"
+	echo "$0: response status not equal to 200"
+	echo "$0: programm will exit"
 	exit 1
 fi
 
