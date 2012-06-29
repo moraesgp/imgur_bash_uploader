@@ -23,6 +23,8 @@ CURRENT_DIR=$PHOTO_ROOT_DIR
 CURRENT_FILE=""
 ALBUM_PHOTO_HASHES=
 
+# starts with dev/null because pictures in the root dir will be uploaded but wont be 
+# added to any specific album
 arr=("/dev/null")
 
 # Warning! All files and folders on PHOTO_ROOT_DIR will be moved to 
@@ -30,7 +32,7 @@ arr=("/dev/null")
 
 while [ -n "$(ls -A $PHOTO_ROOT_DIR)" ]
 do
-	echo ${arr[@]}
+	echo "$0: stack: ${arr[@]}"
 	CURRENT_FILE=`ls -1Ad $CURRENT_DIR/* 2> /dev/null | head -1`
 	if [ -z "$CURRENT_FILE" ];then
 		# current directory is empty. Remove it and go to parent directory
