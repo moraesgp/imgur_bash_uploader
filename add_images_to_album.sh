@@ -88,7 +88,7 @@ echo $OAUTH_SIGNATURE
 echo
 # --header "Content-Type: application/x-www-form-urlencoded" \
 
-curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE \
+curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE -sS \
 --header "Authorization: OAuth "\
 "oauth_consumer_key=\"$OAUTH_CONSUMER_KEY\","\
 "oauth_token=\"$OAUTH_TOKEN\","\

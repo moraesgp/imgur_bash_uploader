@@ -32,7 +32,7 @@ BASE_STRING="${METHOD}&`urlencode ${IMAGES_API_URL}`&"$PARAMETER_STRING
 
 OAUTH_SIGNATURE=`echo -n $BASE_STRING | openssl dgst -sha1 -binary -hmac "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}" | base64`
 
-curl --dump-header $HEADERS_N_COOKIES_FILE \
+curl --dump-header $HEADERS_N_COOKIES_FILE -sS \
 --header "Authorization: OAuth "\
 "oauth_consumer_key=\"$OAUTH_CONSUMER_KEY\","\
 "oauth_token=\"$OAUTH_TOKEN\","\
