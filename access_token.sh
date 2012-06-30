@@ -24,7 +24,7 @@ BASE_STRING="${METHOD}&`urlencode ${ACCESS_TOKEN_URL}`&"$PARAMETER_STRING
 
 OAUTH_SIGNATURE=`echo -n $BASE_STRING | openssl dgst -sha1 -binary -hmac "${OAUTH_CONSUMER_SECRET}&${OAUTH_TOKEN_SECRET}" | base64`
 
-curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE -sS \
+curl --dump-header $HEADERS_N_COOKIES_FILE --trace-ascii $DEBUG_FILE -sSk \
 --header "Content-Type: application/x-www-form-urlencoded" \
 --header "Authorization: OAuth "\
 "oauth_consumer_key=\"$OAUTH_CONSUMER_KEY\","\
