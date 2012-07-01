@@ -29,6 +29,15 @@ source $ACCESS_TOKEN_FILE
 
 ./search_pictures.sh
 
+EXIT_CODE_01=$?
+if [ $EXIT_CODE_01 -ne 0 ];then
+	echo "$0: There was a problem. Check log"
+	echo "$0: ERROR_CODE $EXIT_CODE_01"
+	# Note: script could exit here but I chose not to
+	# so it has a chance to add uploaded photos to their albums
+fi
+
+
 # after all pictures are inserted the next script will do the following:
 # 1) find files with ALBUM_FILE_SUFFIX - those file have the album name and 
 #      the images hashes that should be inserted into that album
@@ -46,11 +55,13 @@ do
         echo "$0: working album file  $ALBUM_FILE_IMGs_HASH"
 	if [ -s "$ALBUM_FILE_IMGs_HASH" ];then
 		./add_images_to_album.sh $ALBUM_FILE_IMGs_HASH
-		if [ $? -eq 0 ];then
+		EXIT_CODE_02=$?
+		if [ $EXIT_CODE_02 -eq 0 ];then
 		        mv $ALBUM_FILE_IMGs_HASH ${ALBUM_FILE_IMGs_HASH}_COMPLETED
 		else
 			echo "$0: Problem including images into album. Please check"
-			exit 1
+			echo "$0: ERROR_CODE $EXIT_CODE_02"
+			break
 		fi
 	else
 		echo "$0: file $ALBUM_FILE_IMGs_HASH has zero byte. Skipping"
@@ -58,4 +69,10 @@ do
 	fi
         ALBUM_FILE_IMGs_HASH=$(find $LOGTEMPDIR -name "*${ALBUM_FILE_SUFFIX}*" -not -name "*COMPLETED" -print | head -1)
 done
+
+EXIT_CODE=0
+# if at least one of the exit_codes is non-zero the sum should also be non-zero
+(( EXIT_CODE = EXIT_CODE_01 + EXIT_CODE_02 ))
+
+exit $EXIT_CODE
 

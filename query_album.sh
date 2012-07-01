@@ -75,5 +75,7 @@ fi
 
 ALBUM_HASH=`echo $ALBUM_HASH_TEMP | perl -npe 's/^<id>(.*)<\/id>.*/$1/'`
 
+echo "$0: album $ALBUM_NAME found with hash $ALBUM_HASH"
+
 echo $ALBUM_HASH > ${LOGTEMPDIR}/${ALBUM_NAME}_${ALBUM_HASH_SUFFIX}
 

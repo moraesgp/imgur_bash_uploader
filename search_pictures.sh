@@ -52,11 +52,12 @@ do
 		echo "$0: FOUND FILE $CURRENT_FILE"
 		LAST_INDEX=$(expr ${#arr[@]} - 1)
 		./upload_image.sh $CURRENT_FILE `basename $CURRENT_DIR` ${arr[$LAST_INDEX]}
-		if [ $? -eq 0 ];then
+		UPLOAD_IMAGE_RETURN_CODE=$?
+		if [ $UPLOAD_IMAGE_RETURN_CODE -eq 0 ];then
 			mv $CURRENT_FILE ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
 		else
 			echo "$0: There was a problem with upload_image.sh. Please check"
-			exit 1
+			exit $UPLOAD_IMAGE_RETURN_CODE
 		fi
 	fi
 done

@@ -48,12 +48,20 @@ CURL_RETURN_VALUE=$?
 
 echo "$0: CURL_RETURN_VALUE: $CURL_RETURN_VALUE"
 
+if [ $CURL_RETURN_VALUE -eq 55 ];then
+	exit $CURL_RETURN_VALUE
+fi
+
 grep -i 'HTTP/1.1 200 OK' $HEADERS_N_COOKIES_FILE > /dev/null
 
 if [ $? -ne 0 ];then
 	echo "$0: response status not equal to 200"
 	grep -i 'Status' $HEADERS_N_COOKIES_FILE
-	xpath -e "/error/message" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<message>(.*)<\/message>.*/$1/'
+	if [ -s $ACCESS_RESOURCES_RESPONSE_BODY ];then
+		xpath -e "/error/message" -q $ACCESS_RESOURCES_RESPONSE_BODY | perl -npe 's/^<message>(.*)<\/message>.*/$1/'
+	else
+		echo "$0: file $ACCESS_RESOURCES_RESPONSE_BODY has zero byte"
+	fi
 	echo "$0: programm will exit"
 	exit 1
 fi

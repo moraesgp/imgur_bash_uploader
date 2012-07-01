@@ -97,8 +97,8 @@ RESPONSE_STATUS_LINE=`grep '^HTTP' $HEADERS_N_COOKIES_FILE`
 echo $RESPONSE_STATUS_LINE | grep 200
 
 if [ $? -ne 0 ];then
-	echo "response status not equal to 200"
-	echo "programm will exit"
+	echo "$0: response status not equal to 200"
+	echo "$0: programm will exit"
 	exit 1
 fi
 
