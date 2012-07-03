@@ -32,7 +32,7 @@ arr=("/dev/null")
 
 while [ -n "$(ls -A $PHOTO_ROOT_DIR)" ]
 do
-	echo "$0: stack: ${arr[@]}"
+	# echo "$0: stack: ${arr[@]}"
 	CURRENT_FILE=`ls -1Ad $CURRENT_DIR/* 2> /dev/null | head -1`
 	if [ -z "$CURRENT_FILE" ];then
 		# current directory is empty. Remove it and go to parent directory
@@ -55,6 +55,10 @@ do
 		UPLOAD_IMAGE_RETURN_CODE=$?
 		if [ $UPLOAD_IMAGE_RETURN_CODE -eq 0 ];then
 			mv $CURRENT_FILE ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
+		elif [ $UPLOAD_IMAGE_RETURN_CODE -eq 55 ];then
+			echo "$0: Curl returned code 55 for empty response. Happens a lot with imgur. Just retry"
+			# since the photo was not moved a simple continue will make it try the last picture again
+			continue
 		else
 			echo "$0: There was a problem with upload_image.sh. Please check"
 			exit $UPLOAD_IMAGE_RETURN_CODE
