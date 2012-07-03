@@ -54,6 +54,8 @@ do
 		./upload_image.sh $CURRENT_FILE `basename $CURRENT_DIR` ${arr[$LAST_INDEX]}
 		UPLOAD_IMAGE_RETURN_CODE=$?
 		if [ $UPLOAD_IMAGE_RETURN_CODE -eq 0 ];then
+			echo "$0: Image `basename $CURRENT_FILE` uploaded successfully"
+			echo "$0: ------------------------------------------------------------"
 			mv $CURRENT_FILE ${MOVE_PHOTO_DIR}${CURRENT_DIR#$PHOTO_ROOT_DIR}
 		elif [ $UPLOAD_IMAGE_RETURN_CODE -eq 55 ];then
 			echo "$0: Curl returned code 55 for empty response. Happens a lot with imgur. Just retry"
